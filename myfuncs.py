@@ -26,7 +26,7 @@ def theta(x):
     """Heaviside theta"""
     return 0 if x<0 else 1
 
-def plotband(H,kdots:np.ndarray,labels:list[str],ndots:int,title:str,savefig=False,show=True,savename=''):
+def plotband(H,kdots:np.ndarray,labels:list[str],ndots=10,title="",legend=False,legendnames=[],hlines=False,hpos=0,savefig=False,show=True,savename=''):
     """
     A function plotting bands along the lines connecting `kdots`.
 
@@ -34,9 +34,6 @@ def plotband(H,kdots:np.ndarray,labels:list[str],ndots:int,title:str,savefig=Fal
     - `kdots` are coordinates of connecting points.
     - `labels` are names of `kdots`.
     - `ndots` are number of dots on one connecting line.
-    - `title` is the `plt.title()` parameter.
-    - `savename` is the `plt.savefig()` parameter.
-    - `savefig` and `show` determine whether to save plot and show plot.
     """
     nk=len(kdots)
     krange=[]
@@ -68,8 +65,12 @@ def plotband(H,kdots:np.ndarray,labels:list[str],ndots:int,title:str,savefig=Fal
     for k in krange:
         elist.append(H(k))
     elist=np.transpose(np.array(elist))
-    for line in elist:
-        plt.plot(kplotrange,line)
+    for i in range(len(elist)):
+        line=elist[i]
+        if legend:
+            plt.plot(kplotrange,line,label=legendnames[i])
+        else:
+            plt.plot(kplotrange,line)
 
     emax,emin=max(elist.flatten()),min(elist.flatten())
     plt.xlim(kplotrange[0],kplotrange[-1])
@@ -79,7 +80,11 @@ def plotband(H,kdots:np.ndarray,labels:list[str],ndots:int,title:str,savefig=Fal
     plt.xticks(klabel,labels)
     plt.vlines(klabel,emin-0.2*abs(emin),emax+0.2*abs(emax),colors="black",linewidth=1)
     plt.title(title)
+    if hlines:
+        plt.hlines(hpos,kplotrange[0],kplotrange[-1],colors="black",linewidth=1)
+    if legend:
+        plt.legend()
     if savefig:
-        plt.savefig(savename)
+        plt.savefig(savename,dpi=600)
     if show:
         plt.show()
