@@ -11,9 +11,10 @@ def myeig(M:np.ndarray):
     """
     Output a hermitian matrix M's eigvals and corresponding eigvecs in the order of eigvals' values.
     
-    Return a tuple of np.ndarray: `(eigvals, eigvecs)`.
+    Return a tuple of np.ndarray: `(eigvals, eigvecs)`. `eigvals[m]` and `eigvecs[m]` are the `m`th eigsys.
     """
     eigs=np.linalg.eig(M)
+    eigvecs=np.transpose(eigs[1])
     eigs2=[[np.real(eigs[0][i]),eigs[1][i]] for i in range(len(M))]
     eigs2.sort(key=lambda x:x[0])
     return np.array([eigs2[i][0] for i in range(len(M))]),np.array([eigs2[i][1] for i in range(len(M))])
@@ -88,3 +89,18 @@ def plotband(H,kdots:np.ndarray,labels:list[str],ndots=10,title="",legend=False,
         plt.savefig(savename,dpi=600)
     if show:
         plt.show()
+
+def HF(E,summethod,VH,VF,NA,NMAX,xf):
+    r"""
+    A function for Hartree-Fock calculations of two or more bands.
+
+    input parameters:
+    - `E`: zeroth order energy function $E(k,α)$.
+    - `summethod`: a function summing over points in 1BZ or other areas.
+    - `VH`: Hartree term function $V_H(k,k',α_1,α_2,α_3,α_4)$.
+    - `VF`: Fock term function.
+    - `NA`: number of bands.
+    - `NMAX`: maximum time of iterations.
+    - `xf`: filling 
+    """
+    pass
